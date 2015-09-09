@@ -1,0 +1,33 @@
+{% extends 'layout.html' %}
+
+{% block title %}{% endblock %}
+
+
+{% block content %}
+
+  <div class="container">
+
+    <h1>{{ title }}</h1>
+
+    <form>
+      <div class="form-group">
+        <input type="text" class="form-control" id="name" placeholder="Name">
+      </div>
+      <div class="form-group">
+        <input type="text" class="form-control" id="enemy" placeholder="Enemy">
+      </div>
+      <div class="form-group">
+        <input type="text" class="form-control" id="power" placeholder="Power">
+      </div>
+      <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+
+    <br>
+    <p id="message"></p>
+
+    <br>
+    <ul id="all"></ul>
+
+  </div>
+
+{% endblock %}
