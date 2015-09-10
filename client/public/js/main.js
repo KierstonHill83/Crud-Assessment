@@ -22,7 +22,7 @@ function getSuperheros() {
   $('#all').html('');
   $.get('/superheros', function(data) {
     for (var i = 0; i < data.length; i++) {
-      $('#all').html('<li>' + data[i].name + '</li>');
+      $('#all').append('<li>' + data[i].name + '</li>');
     }
   });
 }
