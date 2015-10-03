@@ -3,7 +3,7 @@ $(document).on('ready', function() {
   getSuperheros();
 });
 
-$('form').on('submit', function(event) {
+$('#superhero-form').on('submit', function(event) {
   event.preventDefault();
   $('#message').html('');
   var payload = {
@@ -11,7 +11,7 @@ $('form').on('submit', function(event) {
     power: $('#power').val(),
     enemy: $('#enemy').val()
   };
-  $.post('/superheros', payload, function(data) {
+  $.post('/api/v1/superheros', payload, function(data) {
     $('#message').html('Added');
     $('#message').html('');
     getSuperheros();
@@ -20,7 +20,7 @@ $('form').on('submit', function(event) {
 
 function getSuperheros() {
   $('#all').html('');
-  $.get('/superheros', function(data) {
+  $.get('/api/v1/superheros', function(data) {
     for (var i = 0; i < data.length; i++) {
       $('#all').append('<li>' + data[i].name + '</li>');
     }

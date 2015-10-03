@@ -7,9 +7,19 @@
 
   <div class="container">
 
+  {% if user %}
+
+    <p>Welcome, {{user.username}}</p>
+    <a href="/logout">Logout</a>
+
+  {% else %}
+    <a href="/register">Register</a> or <a href="/login">Login</a>
+
+  {% endif %}
+
     <h1>{{ title }}</h1>
 
-    <form>
+    <form id="superhero-form">
       <div class="form-group">
         <input type="text" class="form-control" id="name" placeholder="Name" require>
       </div>

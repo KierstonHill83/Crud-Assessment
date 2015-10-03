@@ -1,74 +1,50 @@
 var express = require('express');
+var passport = require('passport');
+var User = require('../models/user');
 var router = express.Router();
-var Superhero = require('../models/superhero.js');
 
-router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Superheros' });
+
+router.get('/', function(req, res) {
+    console.log(req.user);
+    res.render('index', { title: 'Superheros', user: req.user });
 });
 
-// GET ALL superheros
-router.get('/superheros', function(req, res, next) {
-  Superhero.find({}, function(err, data) {
-    if(err) {
-      res.json({'message': err});
-    } else {
-      res.json(data);
+
+router.get('/register', function(req, res) {
+    res.render('register', { });
+});
+
+router.post('/register', function(req, res) {
+    console.log(req.body);
+    User.register(new User({ username : req.body.username }), req.body.password, function(err) {
+        if (err) {
+            return res.render('register');
+        }
+
+        passport.authenticate('local')(req, res, function () {
+            res.redirect('/');
+        });
+    });
+});
+
+router.get('/login', function(req, res) {
+    res.render('login', { user : req.user });
+});
+
+router.post('/login', passport.authenticate('local'), function(req, res) {
+    res.redirect('/');
+});
+
+router.get('/logout', ensureAuthentication, function(req, res) {
+    req.logout();
+    res.redirect('/');
+});
+
+function ensureAuthentication(req, res, next) {
+    if (req.isAuthenticated()) { 
+        return next(); 
     }
-  });
-});
-
-// GET single superheros
-router.get('/superhero/:id', function(req, res, next) {
-   Superhero.findById(req.params.id, function(err, data) {
-    if(err) {
-      res.json({'message': err});
-    } else {
-      res.json(data);
-    }
-  });
-});
-
-// POST ALL superheros
-router.post('/superheros', function(req, res, next) {
-  newSuperhero = new Superhero({
-    name: req.body.name,
-    power: req.body.power,
-    enemy: req.body.enemy
-  });
-  newSuperhero.save(function(err, data) {
-    if(err) {
-      res.json({'message': err});
-    } else {
-      res.json(data);
-    }
-  });
-});
-
-// PUT single superheros
-router.put('/superhero/:id', function(req, res, next) {
-  var update = {
-    name: req.body.name,
-    power: req.body.power,
-    enemy: req.body.enemy
-  };
-  Superhero.findByIdAndUpdate(req.params.id, update, function(err, data) {
-    if(err) {
-      res.json({'message': err});
-    } else {
-      res.json(data);
-    }
-  });
-});
-
-// DELETE single superheros
-router.delete('/superhero/:id', function(req, res, next) {
-  Superhero.findByIdAndRemove(req.params.id, function(err, data) {
-    if(err) {
-      res.json({'message': err});
-    } else {
-      res.json(data);
-    }
-  });
-});
+    res.redirect('/login');
+}
 
 module.exports = router;
